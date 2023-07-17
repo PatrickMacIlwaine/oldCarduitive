@@ -6,6 +6,9 @@ function StartPage(){
 
   let navigate = useNavigate();  
 
+  const frontport = 'http://localhost:3000/'
+  const backport = 'http://localhost:3001/'
+
   const generateKey = () => {
     const url = '' 
     let key = '';
@@ -28,7 +31,7 @@ function StartPage(){
 
 
   const startGame = async (roomId) => {
-    return fetch(`http://localhost:3001/game/create/${roomId}`, {
+    return fetch(`${backport}game/create/${roomId}`, {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json',

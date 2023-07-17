@@ -9,17 +9,14 @@ import classes from './PlayingGame.module.css';
 function PlayingGame(props){
 
   const { roomId }= useParams();
-
   const [player,setPlayer] = useState(0);
-
   const [roomData, setRoomData] = useState(null);
-
   const [ready, setReady]  = useState(false);
-
-
   const [isCopied, setIsCopied] = useState(false);
 
-  const port = 'localhost:3000/game/'
+
+  const frontport = 'http://localhost:3000/'
+  const backport = 'http://localhost:3001/'
   let navigate = useNavigate();
 
 
@@ -27,7 +24,7 @@ function PlayingGame(props){
   
 
   const fetchRoomData = async (roomId) => {
-    return fetch(`http://localhost:3001/game/data/${roomId}`)
+    return fetch(`${backport}game/data/${roomId}`)
     .then(response => {
       if (!response.ok){
         throw new Error(`HTTP error! status : ${response.status}`);
@@ -40,7 +37,7 @@ function PlayingGame(props){
   }
 
   const addReadyPerson = async (roomId) => {
-    return fetch(`http://localhost:3001/game/ready/${roomId}`, {
+    return fetch(`${backport}game/ready/${roomId}`, {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json',
@@ -49,7 +46,7 @@ function PlayingGame(props){
   }
 
   const removeNumberFromArray = async (roomId, arrayName, numberToRemove) => {
-    return fetch(`http://localhost:3001/game/data/${roomId}`, {
+    return fetch(`${backport}game/data/${roomId}`, {
         method: 'PATCH',
         headers: {
             'Content-Type' : 'application/json',
@@ -59,7 +56,7 @@ function PlayingGame(props){
 }
 
 const startGame = async (roomId) => {
-  return fetch(`http://localhost:3001/game/create/${roomId}`, {
+  return fetch(`${backport}game/create/${roomId}`, {
     method: 'POST',
     headers: {
       'Content-Type' : 'application/json',
@@ -101,11 +98,6 @@ const startGame = async (roomId) => {
 
 
 
-
-
-
-
-
 return (
 
   <div> 
@@ -137,9 +129,9 @@ return (
       
     <div>
       
-      <CopyToClipboard text={`${port}${roomId}`} onCopy={handleCopyClick}>
+      <CopyToClipboard text={`${frontport}game/${roomId}`} onCopy={handleCopyClick}>
         <button>
-        <h2>localhost:3000/game/3r2Rd</h2>
+        <h2>{`${frontport}${roomId}`}</h2>
         Copy Link to Clipboard
         </button>
       </CopyToClipboard>
@@ -173,35 +165,24 @@ return (
         </div> }
 
      {player === 1 && <div className= {classes.cardContainer}>
-        
+      
         {roomData.numbers2.map((num, index) => (
-          
           <button  className = {classes.card} key={index} onClick={() => removeNumberFromArray(roomId, 'numbers2', num)}>
           {num}
           </button>
-
         ))}
         </div>}
 
         </div>}
-      
-
-      
       </div>}
-    
-
       </>
 
     ) : (
       <div>Loading...</div>
     )}
-
-    
-
    
   </div>
-    
-
+  
 </div>
 
 );
