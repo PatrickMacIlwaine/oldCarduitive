@@ -15,8 +15,8 @@ function PlayingGame(props){
   const [isCopied, setIsCopied] = useState(false);
 
 
-  const frontport = 'http://localhost:3000/'
-  const backport = 'http://localhost:3001/'
+  const frontport = procces.env.FRONTPORT;
+  const backport =  process.env.BACKPORT;      
   let navigate = useNavigate();
 
 
