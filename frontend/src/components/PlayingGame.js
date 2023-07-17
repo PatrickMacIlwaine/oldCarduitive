@@ -15,7 +15,7 @@ function PlayingGame(props){
   const [isCopied, setIsCopied] = useState(false);
 
 
-  const frontport = procces.env.FRONTPORT;
+  const frontport = process.env.FRONTPORT;
   const backport =  process.env.BACKPORT;      
   let navigate = useNavigate();
 
