@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
+const path = require('path');
+app.use(express.static(path.join(__dirname + "/public")))
 app.use(cors());
 app.use(express.json());
 
@@ -32,6 +34,8 @@ function generateRoomData(roomId) {
     gameStarted : false,
     gameCreated : true,
     lastPlayedCard : 0,
+    player1Ready: false,
+    player2Ready: false,
   };
 }
 
@@ -151,7 +155,7 @@ app.delete('/message/:roomId', (req, res) => {
   console.log(`Room Delete -  ${req} ${res} roomId : ${roomId}`);
 });
 
-const port = 3001; 
-app.listen(port, () => {
-  console.log(`Backend server is running at http://localhost:${port}`);
+const PORT = process.env.PORT || 3001; 
+app.listen(PORT, () => {
+  console.log(`Backend server is running at http://localhost:${PORT}`);
 });

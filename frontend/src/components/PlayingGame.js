@@ -15,8 +15,8 @@ function PlayingGame(props){
   const [isCopied, setIsCopied] = useState(false);
 
 
-  const frontport = process.env.FRONTPORT;
-  const backport =  process.env.BACKPORT;      
+  const frontport = process.env.REACT_APP_FRONTPORT
+  const backport =  process.env.REACT_APP_BACKPORT
   let navigate = useNavigate();
 
 
@@ -69,6 +69,9 @@ const startGame = async (roomId) => {
 
 
   useEffect(() =>  {
+    if( localStorage.getItem('userID') != undefined){
+      setPlayer(1);
+    }
     const intervalID = setInterval(() => {
       fetchRoomData(roomId).then(setRoomData)
     }, 100);
@@ -85,10 +88,13 @@ const startGame = async (roomId) => {
 
  
 
-  function handelPlayAgain(){
+  async function handelPlayAgain(){
     setReady(false);
     setPlayer(1);
     startGame(roomId);
+    
+    window.location.reload();
+
   }
 
   function handleCopyClick() {
@@ -110,7 +116,10 @@ return (
     {roomData.lost && <div>
         <h1>FAILURE</h1>
         
+      
         {localStorage.removeItem('player')}
+
+        
         <button onClick={handelPlayAgain}> Play again? </button>
 
     </div>}
@@ -127,7 +136,7 @@ return (
 
 
       
-    <div>
+    { !roomData.gameStarted &&  <div>
       
       <CopyToClipboard text={`${frontport}game/${roomId}`} onCopy={handleCopyClick}>
         <button>
@@ -136,7 +145,7 @@ return (
         </button>
       </CopyToClipboard>
       {isCopied && <span style={{color: 'red'}}>Copied!</span>}
-    </div>
+    </div>}
 
     <h2> Game Room : {roomId}</h2>
 

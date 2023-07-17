@@ -6,8 +6,8 @@ function StartPage(){
 
   let navigate = useNavigate();  
 
-  const frontport = 'http://localhost:3000/'
-  const backport = 'http://localhost:3001/'
+  const frontport = process.env.REACT_APP_FRONTPORT
+  const backport = process.env.REACT_APP_BACKPORT
 
   const generateKey = () => {
     const url = '' 
