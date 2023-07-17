@@ -5,9 +5,8 @@
   "main": "backend/index.js",
   "scripts": {
     "install-dependencies": "cd backend && npm install && cd ../frontend && npm install",
-    "start-backend": "node backend/index.js",
-    "start-frontend": "npm start --prefix frontend",
-    "dev": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
+    "start": "node backend/index.js",
+    "dev": "concurrently \"npm run start\" \"npm run start-frontend\"",
     "heroku-postbuild": "cd frontend && npm install && npm run build"
   },
   "engines": {

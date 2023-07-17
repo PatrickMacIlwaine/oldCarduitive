@@ -3,8 +3,13 @@ const cors = require('cors');
 
 const app = express();
 const path = require('path');
+app.use(express.static(path.join(__dirname, 'frontend/build')))
 app.use(cors());
 app.use(express.json());
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/frontend/build/index.html'));
+});
 
 let messages = {};
 let rooms = {};
@@ -154,7 +159,7 @@ app.delete('/message/:roomId', (req, res) => {
   console.log(`Room Delete -  ${req} ${res} roomId : ${roomId}`);
 });
 
-const PORT = process.env.PORT || 3001; 
+const PORT = process.env.PORT || 5000; 
 app.listen(PORT, () => {
   console.log(`Backend server is running at http://localhost:${PORT}`);
 });
