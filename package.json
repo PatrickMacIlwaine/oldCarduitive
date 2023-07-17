@@ -2,5 +2,8 @@
   "name": "myapp",
   "scripts": {
     "heroku-postbuild": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend"
-  }
+  },
+  "engines": {
+  "node": "14.x"
+}
 }
