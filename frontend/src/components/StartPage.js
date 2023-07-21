@@ -25,21 +25,21 @@ function StartPage(){
   function nextPage2(){
     localStorage.clear();
     const newKey = generateKey();
-    localStorage.setItem('player',0)
+    localStorage.setItem('player',1)
     startGame(newKey, 2);
     navigate(`game/${newKey}`);
   }
   function nextPage3(){
     localStorage.clear();
     const newKey = generateKey();
-    localStorage.setItem('player',0)
+    localStorage.setItem('player',1)
     startGame(newKey, 3);
     navigate(`game/${newKey}`);
   }
   function nextPage4(){
     localStorage.clear();
     const newKey = generateKey();
-    localStorage.setItem('player',0)
+    localStorage.setItem('player',1)
     startGame(newKey, 4);
     navigate(`game/${newKey}`);
   }

@@ -122,8 +122,8 @@ useEffect(() =>  {
 
   function handleClickReady(){
     addReadyPerson(roomId);
-    setPlayer(roomData.playersReady);
     makeReady(roomId, player);
+    setPlayer(roomData.playersReady);
     setReady(true);
     setdidCountDown(false);
     setTimeout(() => setReady(false), 5000);
