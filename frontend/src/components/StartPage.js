@@ -6,8 +6,8 @@ function StartPage(){
 
   let navigate = useNavigate();  
 
-  const frontport = process.env.REACT_APP_FRONTPORT
-  const backport = process.env.REACT_APP_BACKPORT
+  const frontport = process.env.REACT_APP_FRONTPORT || 'https://card-frontend-5321708010c5.herokuapp.com/game/G2LBf'
+  const backport = process.env.REACT_APP_BACKPORT || 'https://card-backend-bb5d6df47bd0.herokuapp.com/'
 
   const generateKey = () => {
     const url = '' 
@@ -24,7 +24,7 @@ function StartPage(){
     localStorage.clear();
 
     const newKey = generateKey();
-    localStorage.setItem('userID','first')
+    localStorage.setItem('player',0)
     startGame(newKey);
     navigate(`game/${newKey}`);
   }
@@ -38,9 +38,6 @@ function StartPage(){
       },
     });
   }
-
-
-  
 
 return (
   <div>

@@ -13,7 +13,10 @@ let messages = {};
 let rooms = {};
 
 function generateRoomData(roomId) {
-  const numbers = [];
+  let level = rooms[roomId] ? rooms[roomId].level + 1 : 1;
+  let player1Ready = rooms[roomId] ? rooms[roomId].player1Ready : false;
+  let player2Ready = rooms[roomId] ? rooms[roomId].player2Ready : false;
+  const numbers = [];  
   for (let i = 1; i <= 100; i++) {
     numbers.push(i);
   }
@@ -26,20 +29,27 @@ function generateRoomData(roomId) {
     }
     return removedElements;
   }
-
   return {
-    numbers1: addToArray(numbers, 3),
-    numbers2: addToArray(numbers, 3),
     lost: false,
     won: false,
     playersReady : 0,
     gameStarted : false,
     gameCreated : true,
     lastPlayedCard : 0,
-    player1Ready: false,
-    player2Ready: false,
+    player1Ready: player1Ready,
+    player2Ready: player2Ready,
+    playAgain : 0,
+    level : level, 
+    numbers1: addToArray(numbers, level),
+    numbers2: addToArray(numbers, level),
   };
 }
+
+
+
+
+
+
 
 app.post('/game/create/:roomId', (req, res) => {
   const roomId = req.params.roomId;
@@ -55,7 +65,7 @@ app.post('/game/ready/:roomId', (req, res) => {
   if (roomData) {
     roomData.playersReady++;
     console.log(roomData.playersReady);
-    if (roomData.playersReady === 2){
+    if (roomData.playersReady % 2 == 0){
       roomData.gameStarted = true;
       console.log("gameStarted");
     }
@@ -64,6 +74,22 @@ app.post('/game/ready/:roomId', (req, res) => {
     res.status(404).json({error: "Room not found"});
   }
 });
+
+app.patch('/game/resetLevel/:roomId', (req, res) => {
+  const roomId = req.params.roomId;
+  const roomData = rooms[roomId];
+  const { level } = req.body;
+
+  if (roomData){
+    roomData.level = level - 1;
+
+    console.log("reset level");
+    res.status(200).json({message: "Rest Level"});
+  }else {
+    res.status(404).json({error: "Room not found"});
+  }
+});
+
 
 
 app.get('/game/data/:roomId', (req, res) => {
@@ -95,7 +121,6 @@ app.patch('/game/data/:roomId', (req, res) => {
     else{
       if (roomData.hasOwnProperty(arrayName)) {
         roomData[arrayName] = roomData[arrayName].filter(num => num !== numberToRemove);
-
         res.json(roomData);
       }
       } 
@@ -118,15 +143,6 @@ function secondSmallest(arr) {
   }
      return secondMin;
 }
-
-
-
-
-
-
-
-
-
 
 
 app.post('/message/:roomId', (req, res) => {

@@ -126,8 +126,11 @@ a {
   color: rgb(88 199 250 / 100%);
   cursor: pointer;
   font-family: cursive;
+}
 
-
+.levelTag{
+  display: flex;
+  justify-content: center; /* this will center the items horizontally */
 }
 
 
