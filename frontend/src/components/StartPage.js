@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
+import classes from './StartPage.module.css';
 
 
 function StartPage(){
@@ -40,14 +41,14 @@ function StartPage(){
   }
 
 return (
-  <div>
+  <div className={classes.startDiv}>
     
-    <h1> Psychic! </h1>
-    <div>
-    <button onClick={starthandleClick}>
+    <h1 className= {classes.title}> Psychic! </h1>
+   
+    <button className={classes.startButton} onClick={starthandleClick}>
       <h2> Start New Game !</h2>
     </button> 
-    </div>
+
 
 
  </div>

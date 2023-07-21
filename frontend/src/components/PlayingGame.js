@@ -121,18 +121,17 @@ return (
     <div>
     {roomData ? (
       <>
-    {roomData.lost && <div>
-        <h1>FAILURE</h1>
-        <h2>Level {roomData.level}</h2>
-        <button onClick={handelPlayAgain}> Play again? </button>
+    {roomData.lost && <div className={classes.failureDiv}>
+        <h1 className= {classes.failure}>YOU LOSE</h1>
+        <h2 className= {classes.levelTag}>Level {roomData.level}</h2>
+        <button className = {classes.playAgain} onClick={handelPlayAgain}> Play again? </button>
 
     </div>}
 
-    {roomData.won && !roomData.lost && <div>
-        <h1>You Win!</h1>
-  
-
-        <button onClick={handelContinue}> Continue </button>
+    {roomData.won && !roomData.lost && <div className={classes.winDiv}>
+        <h1 className= {classes.win}>You Win!</h1>
+        <h2 className= {classes.levelTag}>Level {roomData.level}</h2>
+        <button className = {classes.continueButton} onClick={handelContinue}> Continue </button>
     </div>}
 
     {!roomData.won && !roomData.lost &&
@@ -142,19 +141,25 @@ return (
       <h1 >Level {roomData.level}...</h1>
     </div>
 
-    { !roomData.gameStarted &&  <div>
+    { !roomData.gameStarted &&  <div className={classes.readybuttonDiv}>
       
-      <CopyToClipboard text={`${window.location.href}`} onCopy={handleCopyClick}>
-        <button>
+      <CopyToClipboard  className={classes.readybuttonDiv} text={`${window.location.href}`} onCopy={handleCopyClick}>
+        <div className={classes.readybuttonDiv}>
+
+        <button >
         <h2>{`${window.location.href}`}</h2>
         Copy Link to Clipboard
         </button>
+        </div>
+
       </CopyToClipboard>
       {isCopied && <span style={{color: 'red'}}>Copied!</span>}
     </div>}
 
 
-    {!ready && !roomData.gameStarted && <button onClick={handleClickReady}>Ready</button>}
+    {!ready && !roomData.gameStarted && <div className = {classes.readybuttonDiv}>
+      <button className={classes.readyButton} onClick={handleClickReady}>Ready</button> 
+      </div> }
       {roomData.gameStarted && <div>
       
       <div  className = {classes.lastPlayed} >
