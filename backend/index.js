@@ -59,7 +59,6 @@ function generateRoomData(roomId, numberOfPlayers) {
 }
 
 
-
 app.post('/game/create/:roomId', (req, res) => {
   const roomId = req.params.roomId;
   const numberOfPlayers = req.body.numberOfPlayers;
@@ -105,11 +104,9 @@ app.patch('/game/resetLevel/:roomId', (req, res) => {
   const roomId = req.params.roomId;
   const roomData = rooms[roomId];
   const { level } = req.body;
-
   if (roomData){
-    roomData.level = level - 1;
-    roomData.playersReady = 0;
-
+    roomData.level = 1;
+    
     console.log("reset level");
     res.status(200).json({message: "Rest Level"});
   }else {
@@ -172,9 +169,6 @@ app.patch('/game/data/:roomId', (req, res) => {
 });
 
   
-
-
-
 function secondSmallest(arr) {
   if (arr.length < 2) {
       return -1
