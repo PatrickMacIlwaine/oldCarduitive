@@ -48,13 +48,13 @@ function generateRoomData(roomId) {
 
 
 
-
-
-
 app.post('/game/create/:roomId', (req, res) => {
   const roomId = req.params.roomId;
-  console.log(`Game Created at ${roomId}`)
-  rooms[roomId] = generateRoomData(roomId);
+  console.log(`Game Created at ${roomId}`);
+  const roomData = generateRoomData(roomId);
+  roomData.playersReady = 0;
+  roomData.gameStarted = false;
+  rooms[roomId] = roomData;
   res.status(201).json({ success: true });
   console.log(`Post Made ${req} ${res} roomId : ${roomId}`);
 });
@@ -82,6 +82,7 @@ app.patch('/game/resetLevel/:roomId', (req, res) => {
 
   if (roomData){
     roomData.level = level - 1;
+    roomData.playersReady = 0;
 
     console.log("reset level");
     res.status(200).json({message: "Rest Level"});

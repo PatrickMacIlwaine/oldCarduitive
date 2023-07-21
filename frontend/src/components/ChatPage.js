@@ -75,13 +75,8 @@ return (
       onChange = {event => setNewMessage(event.target.value)}     
       />
       <button type="submit">Send</button>
-
     </form>
-
-
     <button onClick={() => deleteRoom(roomId)}>Delete this chat room</button>
-
-    
   </div>
 
 );
