@@ -12,14 +12,14 @@ app.use(express.json());
 let messages = {};
 let rooms = {};
 
-function generateRoomData(roomId) {
+function generateRoomData(roomId, numberOfPlayers) {
   let level = rooms[roomId] ? rooms[roomId].level + 1 : 1;
-  let player1Ready = rooms[roomId] ? rooms[roomId].player1Ready : false;
-  let player2Ready = rooms[roomId] ? rooms[roomId].player2Ready : false;
   const numbers = [];  
+
   for (let i = 1; i <= 100; i++) {
     numbers.push(i);
   }
+
   function addToArray(arr, numElements) {
     const removedElements = [];
     for (let i = 0; i < numElements; i++) {
@@ -29,29 +29,42 @@ function generateRoomData(roomId) {
     }
     return removedElements;
   }
+
+  const playerCount = rooms[roomId] ? rooms[roomId].playerCount : numberOfPlayers;
+  const players = [];
+
+  for (let i = 0; i < playerCount; i++) {
+    const isReady = rooms[roomId] ? rooms[roomId].players[i].isReady : false;
+
+    players.push({
+      id: i,
+      isReady: isReady,
+      numbers: addToArray(numbers, level)
+    });
+  }
+
   return {
     lost: false,
     won: false,
-    playersReady : 0,
-    gameStarted : false,
-    gameCreated : true,
-    lastPlayedCard : 0,
-    player1Ready: player1Ready,
-    player2Ready: player2Ready,
-    playAgain : 0,
-    level : level, 
-    numbers1: addToArray(numbers, level),
-    numbers2: addToArray(numbers, level),
+    playersReady: 0,
+    numberOfConnectedPlayers: 0, 
+    gameStarted: false,
+    gameCreated: true,
+    lastPlayedCard: 0,
+    playerCount: playerCount,
+    playAgain: 0,
+    level: level, 
+    players: players,
   };
 }
 
 
 
-
 app.post('/game/create/:roomId', (req, res) => {
   const roomId = req.params.roomId;
-  console.log(`Game Created at ${roomId}`);
-  const roomData = generateRoomData(roomId);
+  const numberOfPlayers = req.body.numberOfPlayers;
+  console.log(`Game Created at ${roomId} with ${(numberOfPlayers)} number of players` );
+  const roomData = generateRoomData(roomId, numberOfPlayers);
   roomData.playersReady = 0;
   roomData.gameStarted = false;
   rooms[roomId] = roomData;
@@ -64,8 +77,9 @@ app.post('/game/ready/:roomId', (req, res) => {
   const roomData = rooms[roomId];
   if (roomData) {
     roomData.playersReady++;
+    setTimeout(() => roomData.playersReady--, 5000);
     console.log(roomData.playersReady);
-    if (roomData.playersReady % 2 == 0){
+    if (roomData.playersReady % roomData.playerCount == 0){
       roomData.gameStarted = true;
       console.log("gameStarted");
     }
@@ -73,6 +87,18 @@ app.post('/game/ready/:roomId', (req, res) => {
   } else {
     res.status(404).json({error: "Room not found"});
   }
+});
+
+
+app.post('/game/connect/:roomId', (req, res) => {
+  const roomId = req.params.roomId;
+  if (!rooms[roomId]) {
+    res.status(404).json({error: "Room not found"});
+  }
+  const roomData = rooms[roomId];
+  roomData.connectedPlayers += 1;
+  const playerId = roomData.connectedPlayers;
+  res.status(201).json({ success: true, playerId });
 });
 
 app.patch('/game/resetLevel/:roomId', (req, res) => {
@@ -91,6 +117,21 @@ app.patch('/game/resetLevel/:roomId', (req, res) => {
   }
 });
 
+app.patch('/game/setReady/:roomId', (req, res) => {
+  const roomId = req.params.roomId;
+  const roomData = rooms[roomId];
+  const { playerId } = req.body;
+
+  if (roomData){
+    roomData.players[playerId].isReady = true;
+    console.log(`Player ${playerId} is Ready`);
+    res.status(200).json({message: "Set Ready"});
+    
+  }else {
+    res.status(404).json({error: "Player or Room not found"});
+  }
+});
+
 
 
 app.get('/game/data/:roomId', (req, res) => {
@@ -106,11 +147,10 @@ app.get('/game/data/:roomId', (req, res) => {
 
 app.patch('/game/data/:roomId', (req, res) => {
   const roomId = req.params.roomId;
-  const { arrayName, numberToRemove } = req.body;
+  const { playerId, numberToRemove } = req.body;
   const roomData = rooms[roomId];
-
   if (roomData) {
-    const allNumbers = [...roomData.numbers1, ...roomData.numbers2];
+    const allNumbers = roomData.players.reduce((arr, player) => [...arr, ...player.numbers], []);
     const ans = secondSmallest(allNumbers);
     roomData.lastPlayedCard = numberToRemove;
     if (ans === -1) {
@@ -119,14 +159,19 @@ app.patch('/game/data/:roomId', (req, res) => {
     else if (numberToRemove >= ans){
       roomData.lost = true;
     }
-    else{
-      if (roomData.hasOwnProperty(arrayName)) {
-        roomData[arrayName] = roomData[arrayName].filter(num => num !== numberToRemove);
+    else {
+      const player = roomData.players.find(player => player.id === playerId);
+      if (player) {
+        player.numbers = player.numbers.filter(num => num !== numberToRemove);
         res.json(roomData);
       }
-      } 
-     }
+    } 
+  }
 });
+
+  
+
+
 
 function secondSmallest(arr) {
   if (arr.length < 2) {
@@ -146,33 +191,6 @@ function secondSmallest(arr) {
 }
 
 
-app.post('/message/:roomId', (req, res) => {
-  const roomId = req.params.roomId;
-  if (!messages[roomId]) {
-    messages[roomId] = [];
-  }
-  messages[roomId].push(req.body);
-  res.status(204).end();
-  console.log(`Post Made ${req} ${res} roomId : ${roomId}`);
-});
-
-app.get('/message/:roomId', (req, res) => {
-  const roomId = req.params.roomId;
-  if (!messages[roomId]) {
-    return res.status(404).json({ error: 'Room not found' });
-  }
-  res.json(messages[roomId]);
-});
-
-app.delete('/message/:roomId', (req, res) => {
-  const roomId = req.params.roomId;
-  if (!messages[roomId]) {
-    return res.status(404).json({ error: 'Room not found' });
-  }
-  delete messages[roomId];
-  res.status(204).end();
-  console.log(`Room Delete -  ${req} ${res} roomId : ${roomId}`);
-});
 
 const PORT = process.env.PORT || 3001; 
 app.listen(PORT, () => {

@@ -231,3 +231,12 @@ a {
 .continueButton:hover {
   background-color: #2980b9; /* Darker blue on hover */
 }
+
+
+.countDown{
+    font-size: 20vh;    /* Make the text size large */
+    text-align: center; /* Center the text */
+    font-weight: bold;  /* Make the text bold */
+    color: #000000;     /* Set the text color to black */
+    padding: 20px;
+}
