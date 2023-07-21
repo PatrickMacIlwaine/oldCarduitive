@@ -155,9 +155,11 @@ app.patch('/game/data/:roomId', (req, res) => {
     roomData.lastPlayedCard = numberToRemove;
     if (ans === -1) {
       roomData.won = true;
+      res.json(roomData);
     }
     else if (numberToRemove >= ans){
       roomData.lost = true;
+      res.json(roomData);
     }
     else {
       const player = roomData.players.find(player => player.id === playerId);
