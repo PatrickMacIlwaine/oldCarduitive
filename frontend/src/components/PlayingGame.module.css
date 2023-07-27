@@ -142,9 +142,9 @@ a {
 }
 
 .readyButton{
-  font-size: 20vh;
+  font-size: 15vw;
+  border-radius: 10px;
   cursor: pointer;
-  border-radius: 4px;
   color: #0b0b0b;
 }
 
@@ -229,14 +229,14 @@ a {
 }
 
 .continueButton:hover {
-  background-color: #2980b9; /* Darker blue on hover */
+  background-color: #2980b9; 
 }
-
 
 .countDown{
-    font-size: 20vh;    /* Make the text size large */
-    text-align: center; /* Center the text */
-    font-weight: bold;  /* Make the text bold */
-    color: #000000;     /* Set the text color to black */
+    font-size: 20vh;    
+    text-align: center;
+    font-weight: bold;
+    color: #000000;   
     padding: 20px;
 }
+

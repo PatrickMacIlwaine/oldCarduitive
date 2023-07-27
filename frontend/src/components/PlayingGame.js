@@ -6,6 +6,7 @@ import classes from './PlayingGame.module.css';
 
 
 
+
 function PlayingGame(props){
 
   const { roomId }= useParams();
@@ -22,10 +23,14 @@ function PlayingGame(props){
   const [show3, setshow3] = useState(false);
 
 
+
   const frontport = process.env.REACT_APP_FRONTPORT || 'http://localhost/3000/';
   const backport =  process.env.REACT_APP_BACKPORT || 'http://localhost/3001'
 
   let navigate = useNavigate();
+
+
+
 
  
   const fetchRoomData = async (roomId ) => {
@@ -50,6 +55,17 @@ function PlayingGame(props){
     }).catch(e => console.error('Error:', e));
   }
 
+  const makeReady = async (roomId, playerId) => {
+    setPlayer(roomData.playersReady);
+    return fetch(`${backport}game/setReady/${roomId}`, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type' : 'application/json',
+      },
+      body: JSON.stringify({ playerId }),
+  });
+  }
+
   const removeNumberFromArray = async (roomId, playerId, numberToRemove) => {
     return fetch(`${backport}game/data/${roomId}`, {
         method: 'PATCH',
@@ -70,15 +86,7 @@ const setLevel = async (roomId, level) => {
 });
 }
 
-const makeReady = async (roomId, playerId) => {
-  return fetch(`${backport}game/setReady/${roomId}`, {
-    method: 'PATCH',
-    headers: {
-        'Content-Type' : 'application/json',
-    },
-    body: JSON.stringify({ playerId }),
-});
-}
+
 
 const startGame = async (roomId, numberOfPlayers) => {
   return fetch(`${backport}game/create/${roomId}`, {
@@ -112,10 +120,10 @@ useEffect(() =>  {
           }
         }
       });
-  }, 200);
+  }, 120);
 
   return () => clearInterval(intervalID);
-}, [roomId, numberOfPlayers, countDown]); // include all the dependencies
+}, [roomId, numberOfPlayers, countDown]); 
 
 
 
@@ -123,7 +131,6 @@ useEffect(() =>  {
   function handleClickReady(){
     addReadyPerson(roomId);
     makeReady(roomId, player);
-    setPlayer(roomData.playersReady);
     setReady(true);
     setdidCountDown(false);
     setTimeout(() => setReady(false), 5000);
@@ -169,6 +176,10 @@ return (
 
   <div> 
     <div>
+
+    
+
+    
     {roomData ? (
     <>
     {roomData.lost && <div className={classes.failureDiv}>
@@ -225,8 +236,6 @@ return (
 
 
 
-
-
       { !show3 && !show2 && !show1 && roomData.gameStarted && <div>
       
       <div  className = {classes.lastPlayed} >
@@ -252,6 +261,7 @@ return (
     )}
    
   </div>
+  
   
 </div>
 

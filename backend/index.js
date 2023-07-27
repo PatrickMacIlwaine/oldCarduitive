@@ -71,22 +71,7 @@ app.post('/game/create/:roomId', (req, res) => {
   console.log(`Post Made ${req} ${res} roomId : ${roomId}`);
 });
 
-app.post('/game/ready/:roomId', (req, res) => {
-  const roomId = req.params.roomId;
-  const roomData = rooms[roomId];
-  if (roomData) {
-    roomData.playersReady++;
-    setTimeout(() => roomData.playersReady--, 5000);
-    console.log(roomData.playersReady);
-    if (roomData.playersReady % roomData.playerCount == 0){
-      roomData.gameStarted = true;
-      console.log("gameStarted");
-    }
-    res.status(200).json({message: "Player is ready"});
-  } else {
-    res.status(404).json({error: "Room not found"});
-  }
-});
+
 
 
 app.post('/game/connect/:roomId', (req, res) => {
@@ -105,8 +90,9 @@ app.patch('/game/resetLevel/:roomId', (req, res) => {
   const roomData = rooms[roomId];
   const { level } = req.body;
   if (roomData){
-    roomData.level = 1;
-    
+    roomData.level = 0;
+    roomData.playersReady = 0;
+
     console.log("reset level");
     res.status(200).json({message: "Rest Level"});
   }else {
@@ -126,6 +112,23 @@ app.patch('/game/setReady/:roomId', (req, res) => {
     
   }else {
     res.status(404).json({error: "Player or Room not found"});
+  }
+});
+
+app.post('/game/ready/:roomId', (req, res) => {
+  const roomId = req.params.roomId;
+  const roomData = rooms[roomId];
+  if (roomData) {
+    roomData.playersReady++;
+    setTimeout(() => roomData.playersReady--, 5000);
+    console.log(roomData.playersReady);
+    if (roomData.playersReady % roomData.playerCount == 0){
+      roomData.gameStarted = true;
+      console.log("gameStarted");
+    }
+    res.status(200).json({message: "Player is ready"});
+  } else {
+    res.status(404).json({error: "Room not found"});
   }
 });
 

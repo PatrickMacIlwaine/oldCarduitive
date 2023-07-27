@@ -1,0 +1,18 @@
+
+.p {
+  text-align: justify;
+  margin: 2vw;
+  font-size: 2vw;
+  min-height: 6vh;
+}
+
+.btn {
+  padding: 1vw 4vw;
+  background-color: #3498db;
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  justify-content: center;
+  cursor: pointer;
+  text-align: center;
+}

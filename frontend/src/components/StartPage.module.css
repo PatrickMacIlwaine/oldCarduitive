@@ -9,33 +9,52 @@
   justify-content: center;
   align-items: center;
   background-color: #00942a;
-  z-index: 9999;
+  z-index: 0;
   opacity: 0.9;
 
 }
 
 .title {
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  text-align: center;
   color: transparent;
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #000;
-  font-size: 12vh;
+  font-size: 15vw;
   font-weight: bold;
   margin: 0;
+  z-index: -2;
 }
 
 .startButton {
+  z-index: -2;
   margin: 1vh;
   background-color: #3498db;
   border: none;
   padding: 1vh;
-  font-size: 4vh;
+  font-size: 4vw;
   color: #fff;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 .startButton:hover {
+  background-color: #2980b9; /* Darker blue on hover */
+}
+
+.howToPlayButton {
+  justify-content: center;
+  margin: 1vh;
+  background-color: #3498db;
+  border: none;
+  padding: 1vh;
+  font-size: 4vw;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.howToPlayButton:hover {
   background-color: #2980b9; /* Darker blue on hover */
 }
