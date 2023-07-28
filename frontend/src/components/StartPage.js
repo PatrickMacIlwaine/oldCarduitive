@@ -10,8 +10,8 @@ function StartPage(){
   let navigate = useNavigate();  
 
   const [startGamePressed, setstartGamePressed] = useState(false);
-  const [modelOpen, setmodalOpen] = useState(false)
-
+  const [modelOpen, setmodalOpen] = useState(false);
+  const [loading, setloading] = useState(false);
   const [ modalIsOpen, setModalIsOpen ] = useState(false);
 
 
@@ -42,21 +42,30 @@ function StartPage(){
     const newKey = generateKey();
     localStorage.setItem('player',1)
     startGame(newKey, 2);
-    navigate(`game/${newKey}`);
+    setloading(true);
+    setTimeout(() => {
+      navigate(`game/${newKey}`);
+  }, 2000);
   }
   function nextPage3(){
     localStorage.clear();
     const newKey = generateKey();
     localStorage.setItem('player',1)
     startGame(newKey, 3);
-    navigate(`game/${newKey}`);
+    setloading(true);
+    setTimeout(() => {
+      navigate(`game/${newKey}`);
+  }, 2000);
   }
-  function nextPage4(){
+    function nextPage4(){
     localStorage.clear();
     const newKey = generateKey();
     localStorage.setItem('player',1)
     startGame(newKey, 4);
-    navigate(`game/${newKey}`);
+    setloading(true);
+    setTimeout(() => {
+      navigate(`game/${newKey}`);
+  }, 2000);
   }
 
  
@@ -89,16 +98,20 @@ return (
       <h2> Start New Game !</h2>
     </button> }
 
+    { loading && <div className={classes.startButton} onClick={starthandleClick}>
+      <h2> Loading !</h2>
+    </div> }
 
 
-    { startGamePressed &&
+
+    {!loading && startGamePressed &&
     <div>
       <h2>How many players?</h2>
       <button className={classes.startButton} onClick = {nextPage2}    >2</button>
       <button className={classes.startButton} onClick = {nextPage3}    >3</button>
       <button className={classes.startButton} onClick = {nextPage4}    >4</button>
     </div>
-   }
+   } 
 
     <div>
       {!modalIsOpen && 

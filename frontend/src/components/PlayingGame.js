@@ -239,8 +239,22 @@ return (
       { !show3 && !show2 && !show1 && roomData.gameStarted && <div>
       
       <div  className = {classes.lastPlayed} >
-      Last Playted Card : {String(roomData.lastPlayedCard)}
+      Last Played Card : {String(roomData.lastPlayedCard)}
       </div>
+      
+      <div className = {classes.miniCardContainer}> 
+      {roomData.players.map((playerData, index) => (
+      player != index &&
+      <div className={classes.miniCardPlayer} key={index}>
+        {playerData.numbers.map(( numIndex) => (
+          <div className={classes.miniCard} key={numIndex} >
+            ?
+          </div>
+        ))}
+      </div>
+    ))}
+      </div>
+
 
       {roomData.players.map((playerData, index) => (
       player == index &&

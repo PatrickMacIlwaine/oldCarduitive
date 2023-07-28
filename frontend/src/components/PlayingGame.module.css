@@ -6,11 +6,9 @@
 }
 
 :root {
-  --card-width: calc(80vw / 3); 
+  --card-width: calc(60vw / 3); 
   --card-height: calc(var(--card-width) * 1.2); 
 }
-
-
 
 body {
   min-height: 100vh;
@@ -24,7 +22,7 @@ body {
 
 
 .card {
-  margin: 2vh;
+  margin: 10px;
   background: #191c29;
   width: var(--card-width);
   height: var(--card-height);
@@ -35,10 +33,20 @@ body {
   align-items: center;
   text-align: center;
   display: flex;
-  font-size: 3em;
+  font-size: 10vw;
   color: rgb(88 199 250 / 100%);
   cursor: pointer;
   font-family: cursive;
+}
+@media (max-width: 600px) {
+  .card {
+    width: fit-content;
+    height: 15vh;
+    width: 15vh;
+    font-size: 8vh;
+    padding: 20px;
+    text-align: center;
+  }
 }
 
 .card:hover {
@@ -75,7 +83,6 @@ body {
   z-index: -1;
   height: 100%;
   width: 100%;
-  margin: 0 auto;
   transform: scale(0.8);
   filter: blur(calc(var(--card-height) / 6));
   background-image: linear-gradient(
@@ -95,43 +102,56 @@ body {
   }
 }
 
-a {
-  color: #212534;
-  text-decoration: none;
-  font-family: sans-serif;
-  font-weight: bold;
-  margin-top: 2rem;
-}
-
-
 .cardContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+  .cardContainer {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  grid-gap: 2px;
+  grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 
+
 .lastPlayed{
-  margin: 2vh;
-  background: #191c29;
-  height: var(--card-height / 2);
-  padding: 3px;
+  background: #212534;
   position: relative;
-  border-radius: 6px;
   justify-content: center;
   align-items: center;
   text-align: center;
   display: flex;
-  font-size: 3em;
   color: rgb(88 199 250 / 100%);
   cursor: pointer;
   font-family: cursive;
 }
+@media (max-width: 600px) {
+  .lastPlayed {
+    font-size: 4.3vh;
+  }
+}
+@media (min-width: 601px) and (max-width: 900px) {
+  .lastPlayed {
+    font-size: 4vw;
+  }
+}
+@media (min-width: 901px) {
+  .lastPlayed {
+    font-size: 6vw;
+  }
+}
 
 .levelTag{
   display: flex;
-  justify-content: center; /* this will center the items horizontally */
+  padding: 0;
+  justify-content: center; 
+  align-items: center;
+  font-size: 1vh;
 }
 
 .readybuttonDiv{
@@ -187,7 +207,7 @@ a {
 }
 
 .playAgain:hover {
-  background-color: #2980b9; /* Darker blue on hover */
+  background-color: #2980b9; 
 }
 
 
@@ -238,5 +258,35 @@ a {
     font-weight: bold;
     color: #000000;   
     padding: 20px;
+}
+
+.miniCardContainer {
+  display: flex;
+  justify-content: center; 
+  flex-wrap: wrap;
+}
+
+.miniCardPlayer {
+  display: flex;
+  justify-content: center; 
+  flex-wrap: wrap;
+  flex: 1 0 auto;
+  margin: 10px;
+}
+
+.miniCard {
+  margin: 3;
+  background: #343c5d;
+  width: 5vw;
+  height: 5vh;
+  border-radius: 10%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  color: rgb(88 199 250 / 100%);
+  cursor: pointer;
+  font-family: cursive;
+  margin: 1vw;
+  
 }
 

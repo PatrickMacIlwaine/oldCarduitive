@@ -39,7 +39,7 @@
   transition: background-color 0.3s ease;
 }
 .startButton:hover {
-  background-color: #2980b9; /* Darker blue on hover */
+  background-color: #2980b9; 
 }
 
 .howToPlayButton {
