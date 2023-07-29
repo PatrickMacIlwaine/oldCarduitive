@@ -12,8 +12,8 @@ app.use(express.json());
 let messages = {};
 let rooms = {};
 
-function generateRoomData(roomId, numberOfPlayers) {
-  let level = rooms[roomId] ? rooms[roomId].level + 1 : 1;
+function generateRoomData(roomId, numberOfPlayers, i) {
+  const level = i;
   const numbers = [];  
 
   for (let i = 1; i <= 100; i++) {
@@ -62,16 +62,24 @@ function generateRoomData(roomId, numberOfPlayers) {
 app.post('/game/create/:roomId', (req, res) => {
   const roomId = req.params.roomId;
   const numberOfPlayers = req.body.numberOfPlayers;
-  console.log(`Game Created at ${roomId} with ${(numberOfPlayers)} number of players` );
-  const roomData = generateRoomData(roomId, numberOfPlayers);
-  roomData.playersReady = 0;
-  roomData.gameStarted = false;
-  rooms[roomId] = roomData;
+  console.log(`Game Created at ${roomId} with ${(numberOfPlayers)} number of players`);
+  if (!rooms[roomId]) {
+    const roomData = generateRoomData(roomId, numberOfPlayers, 1);
+    roomData.playersReady = 0;
+    roomData.gameStarted = false;
+    rooms[roomId] = roomData;
+  }
+  else {
+    const level = rooms[roomId].level + 1;
+    const roomData = generateRoomData(roomId, numberOfPlayers, level);
+    roomData.playersReady = 0;
+    roomData.gameStarted = false;
+    rooms[roomId] = roomData;
+  }
+  
   res.status(201).json({ success: true });
   console.log(`Post Made ${req} ${res} roomId : ${roomId}`);
 });
-
-
 
 
 app.post('/game/connect/:roomId', (req, res) => {
