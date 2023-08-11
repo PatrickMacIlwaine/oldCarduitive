@@ -61,6 +61,7 @@ function generateRoomData(roomId, numberOfPlayers, i) {
 
 app.post('/game/create/:roomId', (req, res) => {
   const roomId = req.params.roomId;
+  lock.acquire(roomId, async (done) => {
   const numberOfPlayers = req.body.numberOfPlayers;
   console.log(`Game Created at ${roomId} with ${(numberOfPlayers)} number of players`);
   if (!rooms[roomId]) {
@@ -76,9 +77,10 @@ app.post('/game/create/:roomId', (req, res) => {
     roomData.gameStarted = false;
     rooms[roomId] = roomData;
   }
-  
   res.status(201).json({ success: true });
   console.log(`Post Made ${req} ${res} roomId : ${roomId}`);
+  done()
+  });
 });
 
 
