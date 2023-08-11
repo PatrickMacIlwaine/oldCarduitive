@@ -39,7 +39,7 @@ function StartPage(){
 
   function nextPage(numplayers){
     const newKey = generateKey();
-    startGame(newKey, 2);
+    startGame(newKey, numplayers);
     setloading(true);
     goNextPage(newKey);
   }

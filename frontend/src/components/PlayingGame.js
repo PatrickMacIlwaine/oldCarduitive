@@ -146,6 +146,7 @@ useEffect(() =>  {
   }
 
   async function handelContinue(){
+    setLevel(roomId, roomData.level + 1);
     startGame(roomId, numberOfPlayers); 
   }
 

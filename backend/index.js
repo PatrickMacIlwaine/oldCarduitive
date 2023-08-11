@@ -71,7 +71,7 @@ app.post('/game/create/:roomId', (req, res) => {
     rooms[roomId] = roomData;
   }
   else {
-    const level = rooms[roomId].level + 1;
+    const level = rooms[roomId].level;
     const roomData = generateRoomData(roomId, numberOfPlayers, level);
     roomData.playersReady = 0;
     roomData.gameStarted = false;
@@ -101,9 +101,8 @@ app.patch('/game/resetLevel/:roomId', (req, res) => {
   const roomData = rooms[roomId];
   const { level } = req.body;
   if (roomData){
-    roomData.level = 0;
+    roomData.level = level;
     roomData.playersReady = 0;
-
     console.log("reset level");
     res.status(200).json({message: "Rest Level"});
   }else {
