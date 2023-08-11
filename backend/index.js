@@ -1,11 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-
+const AsyncLock = require('async-lock');
 const app = express();
-const path = require('path');
-
+const lock = new AsyncLock();
 app.use(cors());
 app.use(express.json());
+
 
 
 
@@ -95,6 +95,7 @@ app.post('/game/connect/:roomId', (req, res) => {
 
 app.patch('/game/resetLevel/:roomId', (req, res) => {
   const roomId = req.params.roomId;
+  lock.acquire(roomId, async (done) => {
   const roomData = rooms[roomId];
   const { level } = req.body;
   if (roomData){
@@ -106,39 +107,41 @@ app.patch('/game/resetLevel/:roomId', (req, res) => {
   }else {
     res.status(404).json({error: "Room not found"});
   }
+  done()
+  });
 });
 
-app.patch('/game/setReady/:roomId', (req, res) => {
-  const roomId = req.params.roomId;
-  const roomData = rooms[roomId];
-  const { playerId } = req.body;
-
-  if (roomData){
-    roomData.players[playerId].isReady = true;
-    console.log(`Player ${playerId} is Ready`);
-    res.status(200).json({message: "Set Ready"});
-    
-  }else {
-    res.status(404).json({error: "Player or Room not found"});
-  }
-});
 
 app.post('/game/ready/:roomId', (req, res) => {
   const roomId = req.params.roomId;
-  const roomData = rooms[roomId];
-  if (roomData) {
-    roomData.playersReady++;
-    setTimeout(() => roomData.playersReady--, 5000);
-    console.log(roomData.playersReady);
-    if (roomData.playersReady % roomData.playerCount == 0){
-      roomData.gameStarted = true;
-      console.log("gameStarted");
+  lock.acquire(roomId, async (done) => {
+    const roomData = rooms[roomId];
+    let response;
+    if (roomData){
+      roomData.playersReady++;
+      if (roomData.playersReady == roomData.playerCount){
+        roomData.gameStarted = true;
+        console.log('gamestarted')
+      }
+      response ={
+        status: 200,
+        body: {
+          message: "Set Ready",
+          readyPlayersCount: roomData.playersReady 
+        }
+      };
+    } else{
+      response = {
+        status: 404,
+        body: {error: "Player or Room not found"}
+      }
     }
-    res.status(200).json({message: "Player is ready"});
-  } else {
-    res.status(404).json({error: "Room not found"});
-  }
-});
+    console.log(`Response for Room ${roomId}:`, response);
+    res.status(response.status).json(response.body);
+
+    done()
+    });
+  });
 
 
 
@@ -149,6 +152,16 @@ app.get('/game/data/:roomId', (req, res) => {
     res.json(roomData);
   } else {
     res.status(404).json({ error: 'Room not Found' });
+  }
+});
+
+app.get('/game/exists/:roomId', (req, res) => {
+  const roomId = req.params.roomId;
+  const roomData = rooms[roomId];
+  if (roomData) {
+    res.json(false);
+  } else {
+    res.json(false);
   }
 });
 

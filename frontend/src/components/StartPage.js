@@ -37,40 +37,40 @@ function StartPage(){
     return key;
   };
 
-  function nextPage2(){
-    localStorage.clear();
+  function nextPage(numplayers){
     const newKey = generateKey();
-    localStorage.setItem('player',1)
     startGame(newKey, 2);
     setloading(true);
-    setTimeout(() => {
-      navigate(`game/${newKey}`);
-  }, 2000);
+    goNextPage(newKey);
   }
-  function nextPage3(){
-    localStorage.clear();
-    const newKey = generateKey();
-    localStorage.setItem('player',1)
-    startGame(newKey, 3);
-    setloading(true);
-    setTimeout(() => {
-      navigate(`game/${newKey}`);
-  }, 2000);
-  }
-    function nextPage4(){
-    localStorage.clear();
-    const newKey = generateKey();
-    localStorage.setItem('player',1)
-    startGame(newKey, 4);
-    setloading(true);
-    setTimeout(() => {
-      navigate(`game/${newKey}`);
-  }, 2000);
+  
+
+  async function goNextPage(key){
+    console.log(pageExists(key));
+    const go = await pageExists(key);
+    console.log(key);
+    if (go){
+      navigate(`game/${key}`);
+    }
+    else{
+      setTimeout(() => {
+        goNextPage(key);
+    }, 2000);
+    }
   }
 
- 
   function starthandleClick(){
     setstartGamePressed(true);
+  }
+
+
+  const pageExists = async(roomId) => {
+    return fetch(`${backport}game/exists/${roomId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json',
+      }
+    });
   }
 
   const startGame = async (roomId, numberOfPlayers) => {
@@ -87,11 +87,7 @@ function StartPage(){
 
 return (
   <div className={classes.startDiv}>
-
   
-
-   
-    
     <h1 className= {classes.title}> CARDUITIVE! </h1>
    
     { !startGamePressed && <button className={classes.startButton} onClick={starthandleClick}>
@@ -102,14 +98,12 @@ return (
       <h2> Loading !</h2>
     </div> }
 
-
-
     {!loading && startGamePressed &&
     <div>
       <h2>How many players?</h2>
-      <button className={classes.startButton} onClick = {nextPage2}    >2</button>
-      <button className={classes.startButton} onClick = {nextPage3}    >3</button>
-      <button className={classes.startButton} onClick = {nextPage4}    >4</button>
+      <button className={classes.startButton} onClick = { () => nextPage(2)}>2</button>
+      <button className={classes.startButton} onClick = { () => nextPage(3)}>3</button>
+      <button className={classes.startButton} onClick = { () => nextPage(4)}>4</button>
     </div>
    } 
 

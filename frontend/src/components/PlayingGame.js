@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { json, useParams } from "react-router-dom";
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import classes from './PlayingGame.module.css';
@@ -10,7 +10,7 @@ import classes from './PlayingGame.module.css';
 function PlayingGame(props){
 
   const { roomId }= useParams();
-  const [player,setPlayer] = useState(0);
+  const [playerID , setPlayerID] = useState(0);
   const [ready, setReady]  = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [numberOfPlayers, setnumberOfPlayers] = useState(false);
@@ -47,24 +47,33 @@ function PlayingGame(props){
   }
 
   const addReadyPerson = async (roomId) => {
-    return fetch(`${backport}game/ready/${roomId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type' : 'application/json',
-      },
-    }).catch(e => console.error('Error:', e));
+    try {
+      const response = await fetch(`${backport}game/ready/${roomId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type' : 'application/json',
+        },
+      }).catch(e => console.error('Error:', e));
+    if(!response.ok){
+      throw new Error(`HTTP error! Status : ${response}`);
+    }
+    const responseData = await response.json();
+    const varPlayerID = responseData.readyPlayersCount;
+    setPlayerID(varPlayerID - 1);
+
+    }catch(e){
+      console.error('Error:', e);
+      throw e;
+    }
   }
 
-  const makeReady = async (roomId, playerId) => {
-    setPlayer(roomData.playersReady);
-    return fetch(`${backport}game/setReady/${roomId}`, {
-      method: 'PATCH',
-      headers: {
-          'Content-Type' : 'application/json',
-      },
-      body: JSON.stringify({ playerId }),
-  });
-  }
+
+  useEffect(() => {
+    console.log("player ID: ");
+    console.log(playerID);
+}, [playerID]);
+
+  
 
   const removeNumberFromArray = async (roomId, playerId, numberToRemove) => {
     return fetch(`${backport}game/data/${roomId}`, {
@@ -85,7 +94,6 @@ const setLevel = async (roomId, level) => {
     body: JSON.stringify({ level }),
 });
 }
-
 
 
 const startGame = async (roomId, numberOfPlayers) => {
@@ -126,20 +134,16 @@ useEffect(() =>  {
 }, [roomId, numberOfPlayers, countDown]); 
 
 
-
-
   function handleClickReady(){
     addReadyPerson(roomId);
-    makeReady(roomId, player);
     setReady(true);
     setdidCountDown(false);
-    setTimeout(() => setReady(false), 5000);
   }
 
   async function handelPlayAgain(){
     setLevel(roomId,1);
+   
     startGame(roomId, numberOfPlayers);
-    
   }
 
   async function handelContinue(){
@@ -164,8 +168,7 @@ useEffect(() =>  {
     setTimeout(() => {
       setshow1(false);
     }, 3000);
-    
-    
+    setTimeout(() => setReady(false), 4000);
     setTimeout(() => setIsCopied(false), 5000);
     setdidCountDown(true);
   }
@@ -176,9 +179,6 @@ return (
 
   <div> 
     <div>
-
-    
-
     
     {roomData ? (
     <>
@@ -244,7 +244,7 @@ return (
       
       <div className = {classes.miniCardContainer}> 
       {roomData.players.map((playerData, index) => (
-      player != index &&
+      playerID  != index &&
       <div className={classes.miniCardPlayer} key={index}>
         {playerData.numbers.map(( numIndex) => (
           <div className={classes.miniCard} key={numIndex} >
@@ -257,7 +257,7 @@ return (
 
 
       {roomData.players.map((playerData, index) => (
-      player == index &&
+      playerID == index &&
       <div className={classes.cardContainer} key={index}>
         {playerData.numbers.map((num, numIndex) => (
           <button className={classes.card} key={numIndex} onClick={() => removeNumberFromArray(roomId, index, num)}>
