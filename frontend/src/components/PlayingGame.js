@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { json, useParams } from "react-router-dom";
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import classes from './PlayingGame.module.css';
 
 
-
+import LostPage from './LostPage';
+import WonPage from "./WonPage";
+import InGameRendering from "./InGameRendering";
+import BeforeGameStarts from "./BeforeGameStarts";
 
 function PlayingGame(props){
 
@@ -22,29 +24,24 @@ function PlayingGame(props){
   const [show2, setshow2] = useState(false);
   const [show3, setshow3] = useState(false);
 
-
-
   const frontport = process.env.REACT_APP_FRONTPORT || 'http://localhost/3000/';
   const backport =  process.env.REACT_APP_BACKPORT || 'http://localhost/3001'
 
   let navigate = useNavigate();
 
-
-
-
  
   const fetchRoomData = async (roomId ) => {
-    return fetch(`${backport}game/data/${roomId}`)
-    .then(response => {
+    try {
+      const response = await fetch(`${backport}game/data/${roomId}`)
       if (!response.ok){
         throw new Error(`HTTP error! status : ${response.status}`);
       }
-      return response.json();
-    })  
-    .catch(e => {
+      return await response.json();
+    } catch (e) {
       console.error('There was a problem with your fetch operation ' + e.message);
-    });
-  }
+      throw e;
+    }
+  };
 
   const addReadyPerson = async (roomId) => {
     try {
@@ -115,24 +112,25 @@ const resetReadyStatus = async (roomId) => {
   });
 }
 
-
 useEffect(() =>  {
-  const intervalID = setInterval(() => {
-    fetchRoomData(roomId)
-      .then(data => {
+  const fetchData = async () => {
+      try {
+        const data = await fetchRoomData(roomId);
         setRoomData(data);
-        if (data.playersReady === data.playerCount) {
+        if (data.playersReady === data.playerCount){
           if (!didCountDown) {
             countDown();
             setdidCountDown(true);
           }
         }
-      });
-  }, 120);
-
-  return () => clearInterval(intervalID);
-}, [roomId, numberOfPlayers, countDown]); 
-
+      }
+      catch (error) {
+        console.log(error("Error fetching room data:" , error));
+      }
+    };
+    const intervalID = setInterval(fetchData, 120);
+    return () => clearInterval(intervalID);
+  },[roomId,didCountDown]);
 
   function handleClickReady(){
     addReadyPerson(roomId);
@@ -174,109 +172,31 @@ useEffect(() =>  {
   }
 
 
-
 return (
 
   <div> 
     <div>
-    
     {roomData ? (
     <>
-    {roomData.lost && <div className={classes.failureDiv}>
-        <h1 className= {classes.failure}>YOU LOSE</h1>
-        <h2 className= {classes.levelTag}>Level {roomData.level}</h2>
-        <button className = {classes.playAgain} onClick={handelPlayAgain}> Play again? </button>
-    </div>}
+    <LostPage lost = {roomData.lost} level = {roomData.level} handelPlayAgain = {handelPlayAgain} lastPlayedCard={roomData.lastPlayedCard}/>
+    <WonPage won = {roomData.won} level = {roomData.level} handelContinue = {handelContinue}/>
 
-    {roomData.won && !roomData.lost && <div className={classes.winDiv}>
-        <h1 className= {classes.win}>You Win!</h1>
-        <h2 className= {classes.levelTag}>Level {roomData.level}</h2>
-        <button className = {classes.continueButton} onClick={handelContinue}> Continue </button>
-    </div>}
+    <BeforeGameStarts roomData = {roomData} 
+                      isCopied = {isCopied} 
+                      handleCopyClick = {handleCopyClick} 
+                      ready = {ready} 
+                      handleClickReady = {handleClickReady}  
+                      show1 = {show1} show2 = {show2} show3 = {show3} />
 
-    {!roomData.won && !roomData.lost &&
-    <div>
-
-    <div className= {classes.levelTag}>
-      <h1 >Level {roomData.level}...</h1>
-    </div>
-
-    { !roomData.gameStarted &&  <div className={classes.readybuttonDiv}>
-      
-      <CopyToClipboard  className={classes.readybuttonDiv} text={`${window.location.href}`} onCopy={handleCopyClick}>
-        <div className={classes.readybuttonDiv}>
-
-        <button >
-        <h2>{`${window.location.href}`}</h2>
-        Copy Link to Clipboard
-        </button>
-        </div>
-
-      </CopyToClipboard>
-      {isCopied && <span style={{color: 'red'}}>Copied!</span>}
-    </div>}
-
-
-    { !ready && !roomData?.players[roomData?.readyPlayers]?.isReady  && !roomData.gameStarted && <div className = {classes.readybuttonDiv}>
-      <button className={classes.readyButton} onClick={handleClickReady}>Ready</button> 
-      </div> }
-
-      {roomData.gameStarted && show3 && <div>
-      <div  className = {classes.countDown}> 3 </div>
-      </div>
-      }
-      {roomData.gameStarted && show2 && <div>
-      <div  className = {classes.countDown}> 2 </div>
-      </div>
-      }
-      {roomData.gameStarted && show1 && <div>
-      <div  className = {classes.countDown}> 1 </div>
-      </div>
-      }
-
-
-
-      { !show3 && !show2 && !show1 && roomData.gameStarted && <div>
-      
-      <div  className = {classes.lastPlayed} >
-      Last Played Card : {String(roomData.lastPlayedCard)}
-      </div>
-      
-      <div className = {classes.miniCardContainer}> 
-      {roomData.players.map((playerData, index) => (
-      playerID  != index &&
-      <div className={classes.miniCardPlayer} key={index}>
-        {playerData.numbers.map(( numIndex) => (
-          <div className={classes.miniCard} key={numIndex} >
-            ?
-          </div>
-        ))}
-      </div>
-    ))}
-      </div>
-
-
-      {roomData.players.map((playerData, index) => (
-      playerID == index &&
-      <div className={classes.cardContainer} key={index}>
-        {playerData.numbers.map((num, numIndex) => (
-          <button className={classes.card} key={numIndex} onClick={() => removeNumberFromArray(roomId, index, num)}>
-            {num}
-          </button>
-        ))}
-      </div>
-    ))}
-
-        </div>}
-      </div>}
+    <InGameRendering  roomData = {roomData} 
+                      show1 = {show1} show2 = {show2} show3 = {show3}
+                      removeNumberFromArray = {removeNumberFromArray} 
+                      playerID = {playerID} roomId={roomId} />
       </>
     ) : (
       <div>Loading...</div>
     )}
-   
   </div>
-  
-  
 </div>
 
 );

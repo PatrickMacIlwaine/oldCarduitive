@@ -1,0 +1,13 @@
+.readybuttonDiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.readyButton{
+  font-size: 15vw;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #0b0b0b;
+}
