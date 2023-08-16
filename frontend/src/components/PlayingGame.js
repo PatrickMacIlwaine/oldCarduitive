@@ -31,17 +31,17 @@ function PlayingGame(props){
 
  
   const fetchRoomData = async (roomId ) => {
-    try {
-      const response = await fetch(`${backport}game/data/${roomId}`)
+    return fetch(`${backport}game/data/${roomId}`)
+    .then(response => {
       if (!response.ok){
         throw new Error(`HTTP error! status : ${response.status}`);
       }
-      return await response.json();
-    } catch (e) {
+      return response.json();
+    })  
+    .catch(e => {
       console.error('There was a problem with your fetch operation ' + e.message);
-      throw e;
-    }
-  };
+    });
+  }
 
   const addReadyPerson = async (roomId) => {
     try {
@@ -69,8 +69,6 @@ function PlayingGame(props){
     console.log("player ID: ");
     console.log(playerID);
 }, [playerID]);
-
-  
 
   const removeNumberFromArray = async (roomId, playerId, numberToRemove) => {
     return fetch(`${backport}game/data/${roomId}`, {
@@ -113,24 +111,20 @@ const resetReadyStatus = async (roomId) => {
 }
 
 useEffect(() =>  {
-  const fetchData = async () => {
-      try {
-        const data = await fetchRoomData(roomId);
+  const intervalID = setInterval(() => {
+    fetchRoomData(roomId)
+      .then(data => {
         setRoomData(data);
-        if (data.playersReady === data.playerCount){
+        if (data.playersReady === data.playerCount) {
           if (!didCountDown) {
             countDown();
             setdidCountDown(true);
           }
         }
-      }
-      catch (error) {
-        console.log(error("Error fetching room data:" , error));
-      }
-    };
-    const intervalID = setInterval(fetchData, 120);
-    return () => clearInterval(intervalID);
-  },[roomId,didCountDown]);
+      });
+  }, 120);
+  return () => clearInterval(intervalID);
+}, [roomId, numberOfPlayers, countDown]); 
 
   function handleClickReady(){
     addReadyPerson(roomId);

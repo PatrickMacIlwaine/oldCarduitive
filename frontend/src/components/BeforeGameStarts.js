@@ -14,7 +14,6 @@ function BeforeGameStarts({roomData, handleCopyClick, isCopied, ready, show1, sh
     <CopyLink won = {roomData.won} lost = {roomData.lost}  gameStarted = {roomData.gameStarted} handleCopyClick = {handleCopyClick} isCopied = {isCopied} />
     <ReadyButton won = {roomData.won} lost = {roomData.lost}  ready = {ready} gameStarted = {roomData.gameStarted} handleClickReady = {handleClickReady}/>
     <Countdown won = {roomData.won} lost = {roomData.lost}  gameStarted={roomData.gameStarted} show1={show1} show2={show2} show3={show3} />
-    
     </>
   );
 }
