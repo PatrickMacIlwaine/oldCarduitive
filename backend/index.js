@@ -149,8 +149,8 @@ app.get("/game/exists/:roomId", (req, res) => {
 });
 
 app.patch("/game/data/:roomId", (req, res) => {
+  const roomId = req.params.roomId;
   lock.acquire(roomId, async (done) => {
-    const roomId = req.params.roomId;
     const { playerId, numberToRemove } = req.body;
     const roomData = rooms[roomId];
     if (roomData) {
