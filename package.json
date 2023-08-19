@@ -20,6 +20,7 @@
     "eslint-config-airbnb": "^19.0.4"
   },
   "devDependencies": {
-    "concurrently": "^6.5.1"
+    "concurrently": "^6.5.1",
+    "prettier": "3.0.2"
   }
 }

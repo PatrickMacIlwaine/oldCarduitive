@@ -1,9 +1,8 @@
-
 body {
   min-height: 100vh;
-  background: #212534;
+  background: var(--color-zero);
   display: flex;
-  align-items: center;;
+  align-items: center;
   flex-direction: column;
   box-sizing: border-box;
   color: white;

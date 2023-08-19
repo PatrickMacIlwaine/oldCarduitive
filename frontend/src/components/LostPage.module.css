@@ -8,9 +8,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #e74c3c; 
+  background-color: var(--color-loss);
   z-index: 9999;
-  opacity: 0.9; 
+  opacity: 0.9;
 }
 
 .failure {
@@ -18,14 +18,14 @@
   justify-content: center;
   color: transparent;
   -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: #000; 
+  -webkit-text-stroke-color: #000;
   font-size: 18vh;
   font-weight: bold;
   margin: 0;
 }
 
 .playAgain {
-  background-color: #3498db; 
+  background-color: #3498db;
   border: none;
   font-size: 4vh;
   color: #fff;
@@ -35,10 +35,10 @@
   transition: background-color 0.3s ease;
 }
 
-.levelTag{
+.levelTag {
   display: flex;
   padding: 0;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
   font-size: 1vh;
 }

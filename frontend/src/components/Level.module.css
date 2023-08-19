@@ -1,7 +1,7 @@
-.levelTag{
+.levelTag {
   display: flex;
   padding: 0;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
   font-size: 1vh;
 }

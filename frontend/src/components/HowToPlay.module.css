@@ -1,8 +1,7 @@
-
 .p {
   text-align: justify;
   margin: 2vw;
-  font-size: 2vw;
+  font-size: 3vw;
   min-height: 6vh;
 }
 
@@ -15,4 +14,17 @@
   justify-content: center;
   cursor: pointer;
   text-align: center;
+}
+
+.modal {
+  margin: 1px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  background-color: rgb(139, 134, 134);
+  text-align: center;
+  width: 65vw;
+  z-index: 90;
+  margin : 2vh;
+  position: relative;
+
 }

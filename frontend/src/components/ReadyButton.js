@@ -1,16 +1,14 @@
-import classes from './ReadyButton.module.css';
+import classes from "./ReadyButton.module.css";
 
-function ReadyButton({won, lost, ready, gameStarted, handleClickReady}) {
-
-
-return (
-  <>  
-  { !won && !lost && !ready && !gameStarted && 
-  <div className = {classes.readybuttonDiv}>
-   <button className={classes.readyButton} onClick={handleClickReady}>Ready</button> 
-  </div> 
-  } 
-  </>
+function ReadyButton({ handleClickReady }) {
+  return (
+    <>
+      <div className={classes.readybuttonDiv}>
+        <button className={classes.readyButton} onClick={handleClickReady}>
+          READY
+        </button>
+      </div>
+    </>
   );
 }
 export default ReadyButton;

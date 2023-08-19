@@ -1,5 +1,8 @@
+
+
 .startDiv {
-  position: fixed;
+ 
+  position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
@@ -8,10 +11,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #00942a;
+  background-color: var(--color-won);
   z-index: 0;
   opacity: 0.9;
-
 }
 
 .title {
@@ -39,7 +41,7 @@
   transition: background-color 0.3s ease;
 }
 .startButton:hover {
-  background-color: #2980b9; 
+  background-color: #2980b9;
 }
 
 .howToPlayButton {

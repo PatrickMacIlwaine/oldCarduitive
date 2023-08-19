@@ -1,19 +1,19 @@
 import React from "react";
-import classes from './LostPage.module.css';
+import classes from "./LostPage.module.css";
 
-function LostPage({lost , level , handelPlayAgain , lastPlayedCard}) {
+function LostPage({ level, handelPlayAgain, lastPlayedCard }) {
   return (
     <>
-    {lost && 
-    <div className={classes.failureDiv}>
-      <h1 className= {classes.failure}>YOU LOSE</h1>
-      <h2> Last Played Card : {lastPlayedCard}</h2>
-      <h2> Level {level}</h2>
-      <button className = {classes.playAgain} onClick={handelPlayAgain}> Play again? </button>
-      
-    </div>
-    }  
+      <div className={classes.failureDiv}>
+        <h1 className={classes.failure}>YOU LOSE</h1>
+        <h2> Last Played Card : {lastPlayedCard}</h2>
+        <h2> Level {level}</h2>
+        <button className={classes.playAgain} onClick={handelPlayAgain}>
+          {" "}
+          Play again?{" "}
+        </button>
+      </div>
     </>
-  )
+  );
 }
 export default LostPage;

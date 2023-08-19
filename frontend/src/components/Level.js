@@ -1,16 +1,14 @@
-import classes from './Level.module.css';
+import classes from "./Level.module.css";
 
-
-function Level({won , lost , level}) {
-
+function Level({ roomData }) {
   return (
     <>
-    { !won && !lost && <div className= {classes.levelTag}>
-      <h1 >Level {level}...</h1>
-    </div> 
-    }
+      {roomData && (
+        <div className={classes.levelTag}>
+          <h1>Level {roomData.level}...</h1>
+        </div>
+      )}
     </>
-  ) 
-
+  );
 }
-export default Level
+export default Level;

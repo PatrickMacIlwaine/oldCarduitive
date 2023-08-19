@@ -1,13 +1,84 @@
-.readybuttonDiv{
+.readybuttonDiv {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 10px;
+  margin: 2vw;
 }
 
-.readyButton{
-  font-size: 15vw;
-  border-radius: 10px;
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.readyButton {
+  position: relative;
+  color: var(--color-four);
   cursor: pointer;
-  color: #0b0b0b;
+  padding: 1vw 2vw;
+  border: 0.3vw solid var(--color-four);
+  border-radius: 1vw;
+  background: none;
+  perspective: 4vw;
+  font-family: "Raleway", sans-serif;
+  font-size: 9vw;
+  font-weight: 500;
+  letter-spacing: 2vw;
+  box-shadow: inset 0px 0px 1vw 0px var(--color-four), 
+              0px 0px 1vw 0px var(--color-four);
+}
+
+
+
+.readyButton::before,
+.readyButton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+
+
+.readyButton::after {
+  opacity: 0;
+  z-index: -1;
+  background-color: var(--color-four);
+  box-shadow: 0 0 4vw 0.4vw var(--color-four);
+  transition: opacity 100ms linear;
+}
+
+.readyButton:hover {
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: none;
+  animation: none;
+}
+
+.readyButton:hover:before {
+  filter: blur(3vw);
+  opacity: 1;
+}
+
+.readyButton:hover:after {
+  opacity: 1;
+}
+
+/* Media Queries for Different Devices */
+@media (max-width: 768px) {
+  /* Styles for tablets and phones */
+  .readyButton {
+    border-radius: 2vh;
+    margin-top: 4vh;
+    font-size: 14vw;  /* Adjusted for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  /* Styles for phones */
+  .readyButton {
+    border-radius: 2vh;
+    margin-top: 5vh;
+    font-size: 16vw;  /* Adjusted for very small screens */
+  }
 }
