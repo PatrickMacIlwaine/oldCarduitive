@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { json, useParams } from "react-router-dom";
+import { Link, json, useParams } from "react-router-dom";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import classes from "./PlayingGame.module.css";
+
 
 import LostPage from "./LostPage";
 import WonPage from "./WonPage";
@@ -22,6 +23,8 @@ function PlayingGame(props) {
   const [show2, setshow2] = useState(false);
   const [show3, setshow3] = useState(false);
 
+  const [error, seterror] = useState(null);
+
   const frontport = process.env.REACT_APP_FRONTPORT || "http://localhost/3000/";
   const backport = process.env.REACT_APP_BACKPORT || "http://localhost/3001";
 
@@ -36,6 +39,7 @@ function PlayingGame(props) {
         return response.json();
       })
       .catch((e) => {
+        seterror(e.message);
         console.error(
           "There was a problem with your fetch operation " + e.message
         );
@@ -109,6 +113,7 @@ function PlayingGame(props) {
   useEffect(() => {
     const intervalID = setInterval(() => {
       fetchRoomData(roomId).then((data) => {
+        if (data) {
         setRoomData(data);
         if (data.playersReady === data.playerCount) {
           if (!didCountDown) {
@@ -116,6 +121,7 @@ function PlayingGame(props) {
             setdidCountDown(true);
           }
         }
+      } 
       });
     }, 120);
     return () => clearInterval(intervalID);
@@ -158,6 +164,15 @@ function PlayingGame(props) {
     setTimeout(() => setReady(false), 4000);
     setTimeout(() => setIsCopied(false), 5000);
     setdidCountDown(true);
+  }
+
+  if (error) {
+    return (
+      <div>
+        <h1>Error : {error} </h1>
+        <Link className={classes.link} to={frontport}>Return to home</Link>
+      </div>
+    );
   }
 
   if (roomData && roomData.won) {
