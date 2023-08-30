@@ -32,7 +32,7 @@ function PlayingGame() {
       .catch((e) => {
         seterror(e.message);
         console.error(
-          `There was a problem with your fetch operation , ${e.message}`,
+          `There was a problem with your fetch operation , ${e.message}`
         );
       });
 
@@ -77,6 +77,14 @@ function PlayingGame() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ level }),
+    });
+
+  const nextRound = async (room) =>
+    fetch(`${backport}game/continue/${room}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
   const startGame = async (room) =>
@@ -130,13 +138,11 @@ function PlayingGame() {
   }
 
   async function handlePlayAgainFunction() {
-    await setLevel(roomId);
-    startGame(roomId);
+    await nextRound(roomId);
   }
 
   async function handleContinueFunction() {
-    await setLevel(roomId);
-    startGame(roomId);
+    await nextRound(roomId);
   }
 
   function handleCopyClickFunction() {
@@ -147,10 +153,7 @@ function PlayingGame() {
   if (error) {
     return (
       <div>
-        <h1>
-          Error :
-          {error}
-        </h1>
+        <h1>Error :{error}</h1>
         <Link className={classes.link} to={frontport}>
           Return to home
         </Link>

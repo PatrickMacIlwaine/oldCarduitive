@@ -75,6 +75,29 @@ app.post("/game/create/:roomId", (req, res) => {
   });
 });
 
+const continueGame = (roomId) => {
+  lock.acquire(roomId, async (done) => {
+    numberOfPlayers = rooms[roomId].numberOfPlayers;
+    
+    if (!rooms[roomId]) {
+      const roomData = generateRoomData(roomId, numberOfPlayers, 1);
+      console.log(
+        `Game Created at ${roomId} with ${numberOfPlayers} number of players`
+      );
+      roomData.playersReady = 0;
+      roomData.gameStarted = false;
+      rooms[roomId] = roomData;
+    } else {
+      const level = rooms[roomId].level;
+      const roomData = generateRoomData(roomId, numberOfPlayers, level);
+      roomData.playersReady = 0;
+      roomData.gameStarted = false;
+      rooms[roomId] = roomData;
+    }
+    done();
+  });
+}
+
 app.post("/game/connect/:roomId", (req, res) => {
   const roomId = req.params.roomId;
   if (!rooms[roomId]) {
@@ -86,7 +109,7 @@ app.post("/game/connect/:roomId", (req, res) => {
   res.status(201).json({ success: true, playerId });
 });
 
-app.patch("/game/resetLevel/:roomId", (req, res) => {
+app.patch("/game/continue/:roomId", (req, res) => {
   const roomId = req.params.roomId;
   lock.acquire(roomId, async (done) => {
     const roomData = rooms[roomId];
@@ -102,6 +125,7 @@ app.patch("/game/resetLevel/:roomId", (req, res) => {
     }else {
       res.status(404).json({ error: "Room not found" });
     }
+    continueGame(roomId);
     done();
   });
 });

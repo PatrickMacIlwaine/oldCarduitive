@@ -39,7 +39,7 @@ function InGameRendering({
                           </div>
                         ))}
                       </div>
-                    ),
+                    )
                 )}
               </div>
               {roomData.players.map(
@@ -58,7 +58,7 @@ function InGameRendering({
                         </button>
                       ))}
                     </div>
-                  ),
+                  )
               )}
             </div>
           )}
@@ -78,7 +78,7 @@ InGameRendering.propTypes = {
       PropTypes.shape({
         id: PropTypes.number.isRequired,
         numbers: PropTypes.arrayOf(PropTypes.number).isRequired,
-      }),
+      })
     ).isRequired,
   }).isRequired,
   show1: PropTypes.bool.isRequired,
