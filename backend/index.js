@@ -12,6 +12,7 @@ let rooms = {};
 function generateRoomData(roomId, numberOfPlayers, level) {
   const numbers = Array.from({ length: 100 }, (_, i) => i + 1); // [1,2,3...100]
   const history = []
+  
 
   const distributeCards = () => {
     const removedElements = [];
@@ -89,15 +90,16 @@ app.patch("/game/resetLevel/:roomId", (req, res) => {
   const roomId = req.params.roomId;
   lock.acquire(roomId, async (done) => {
     const roomData = rooms[roomId];
-    const { level } = req.body;
     if (roomData  && roomData.lost) {
-      roomData.level = level;
+      roomData.level = 1;
       roomData.playersReady = 0;
       console.log("reset level");
       res.status(200).json({ message: "Rest Level" });
-    } else if (roomData) {
+    } else if (roomData && roomData.won) {
+      roomData.level = roomData.level + 1;
+      roomData.playersReady = 0;
       res.status(200).json({message : "level already reset"})
-    } else {
+    }else {
       res.status(404).json({ error: "Room not found" });
     }
     done();
@@ -167,7 +169,9 @@ app.patch("/game/data/:roomId", (req, res) => {
       );
       const ans = secondSmallest(allNumbers);
       roomData.lastPlayedCard = numberToRemove;
-      roomData.history.push(numberToRemove);
+      if (!roomData.history.includes(numberToRemove)) {
+        roomData.history.push(numberToRemove);      
+      }
       roomData.nextCard = Math.min(...allNumbers);
       if (ans === -1) {
         roomData.won = true;
