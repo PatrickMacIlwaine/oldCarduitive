@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classes from './Countdown.module.css';
 
 function Countdown({ roomData, show1, show2, show3 }) {
@@ -18,15 +17,6 @@ function Countdown({ roomData, show1, show2, show3 }) {
   );
 }
 
-Countdown.propTypes = {
-  roomData: PropTypes.shape({
-    won: PropTypes.bool.isRequired,
-    lost: PropTypes.bool.isRequired,
-    gameStarted: PropTypes.bool.isRequired,
-  }).isRequired,
-  show1: PropTypes.bool.isRequired,
-  show2: PropTypes.bool.isRequired,
-  show3: PropTypes.bool.isRequired,
-};
+
 
 export default Countdown;

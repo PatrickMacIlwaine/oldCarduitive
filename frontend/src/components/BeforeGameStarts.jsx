@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ReadyButton from './ReadyButton';
 import Countdown from './Countdown';
 import CopyLink from './CopyLink';
@@ -49,19 +48,5 @@ function BeforeGameStarts({
   );
 }
 
-BeforeGameStarts.propTypes = {
-  roomData: PropTypes.shape({
-    won: PropTypes.bool.isRequired,
-    lost: PropTypes.bool.isRequired,
-    gameStarted: PropTypes.bool.isRequired,
-  }).isRequired,
-  handleCopyClick: PropTypes.func.isRequired,
-  isCopied: PropTypes.bool.isRequired,
-  ready: PropTypes.bool.isRequired,
-  show1: PropTypes.bool.isRequired,
-  show2: PropTypes.bool.isRequired,
-  show3: PropTypes.bool.isRequired,
-  handleClickReady: PropTypes.func.isRequired,
-};
 
 export default BeforeGameStarts;

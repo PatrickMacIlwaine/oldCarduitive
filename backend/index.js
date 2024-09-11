@@ -77,26 +77,21 @@ app.post("/game/create/:roomId", (req, res) => {
 
 const continueGame = (roomId) => {
   lock.acquire(roomId, async (done) => {
-    numberOfPlayers = rooms[roomId].numberOfPlayers;
-    
-    if (!rooms[roomId]) {
-      const roomData = generateRoomData(roomId, numberOfPlayers, 1);
-      console.log(
-        `Game Created at ${roomId} with ${numberOfPlayers} number of players`
-      );
+    roomData = rooms[roomId];
+    if (roomData.won) {
+      roomData = generateRoomData(roomId, roomData.numberOfPlayers, roomData.level + 1);
       roomData.playersReady = 0;
       roomData.gameStarted = false;
       rooms[roomId] = roomData;
-    } else {
-      const level = rooms[roomId].level;
-      const roomData = generateRoomData(roomId, numberOfPlayers, level);
+    } else if (roomData.lost) {
+      roomData = generateRoomData(roomId, roomData.numberOfPlayers, 1);
       roomData.playersReady = 0;
       roomData.gameStarted = false;
       rooms[roomId] = roomData;
     }
     done();
   });
-}
+};
 
 app.post("/game/connect/:roomId", (req, res) => {
   const roomId = req.params.roomId;
@@ -111,23 +106,14 @@ app.post("/game/connect/:roomId", (req, res) => {
 
 app.patch("/game/continue/:roomId", (req, res) => {
   const roomId = req.params.roomId;
-  lock.acquire(roomId, async (done) => {
-    const roomData = rooms[roomId];
-    if (roomData  && roomData.lost) {
-      roomData.level = 1;
-      roomData.playersReady = 0;
-      console.log("reset level");
-      res.status(200).json({ message: "Rest Level" });
-    } else if (roomData && roomData.won) {
-      roomData.level = roomData.level + 1;
-      roomData.playersReady = 0;
-      res.status(200).json({message : "level already reset"})
-    }else {
-      res.status(404).json({ error: "Room not found" });
-    }
-    continueGame(roomId);
-    done();
-  });
+  continueGame(roomId);
+  let response = {
+    status: 200,
+    body: {
+      message: 'continued game',
+    },
+  };
+  res.status(response.status);
 });
 
 app.post("/game/ready/:roomId", (req, res) => {

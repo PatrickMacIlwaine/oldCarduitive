@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classes from './InGameRendering.module.css';
 
 function InGameRendering({
@@ -67,26 +66,5 @@ function InGameRendering({
     </>
   );
 }
-
-InGameRendering.propTypes = {
-  roomData: PropTypes.shape({
-    won: PropTypes.bool.isRequired,
-    lost: PropTypes.bool.isRequired,
-    gameStarted: PropTypes.bool.isRequired,
-    lastPlayedCard: PropTypes.number.isRequired,
-    players: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        numbers: PropTypes.arrayOf(PropTypes.number).isRequired,
-      })
-    ).isRequired,
-  }).isRequired,
-  show1: PropTypes.bool.isRequired,
-  show2: PropTypes.bool.isRequired,
-  show3: PropTypes.bool.isRequired,
-  removeNumberFromArray: PropTypes.func.isRequired,
-  playerID: PropTypes.number.isRequired,
-  roomId: PropTypes.string.isRequired,
-};
 
 export default InGameRendering;

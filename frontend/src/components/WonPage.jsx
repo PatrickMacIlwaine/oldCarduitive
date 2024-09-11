@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classes from './WonPage.module.css';
 
 function WonPage({ level, handleContinue, history }) {
@@ -16,9 +15,5 @@ function WonPage({ level, handleContinue, history }) {
     </div>
   );
 }
-WonPage.propTypes = {
-  level: PropTypes.number.isRequired,
-  handleContinue: PropTypes.func.isRequired,
-  history: PropTypes.number.isRequired,
-};
+
 export default WonPage;

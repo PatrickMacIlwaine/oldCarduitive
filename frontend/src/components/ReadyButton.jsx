@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classes from './ReadyButton.module.css';
 
 function ReadyButton({ handleClickReady }) {
@@ -11,9 +10,5 @@ function ReadyButton({ handleClickReady }) {
     </div>
   );
 }
-
-ReadyButton.propTypes = {
-  handleClickReady: PropTypes.func.isRequired,
-};
 
 export default ReadyButton;

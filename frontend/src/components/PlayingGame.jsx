@@ -70,31 +70,23 @@ function PlayingGame() {
       body: JSON.stringify({ playerId, numberToRemove }),
     });
 
-  const setLevel = async (room, level) =>
-    fetch(`${backport}game/resetLevel/${room}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ level }),
-    });
-
-  const nextRound = async (room) =>
-    fetch(`${backport}game/continue/${room}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-  const startGame = async (room) =>
-    fetch(`${backport}game/create/${room}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ numberOfPlayers }),
-    });
+  const nextRound = async (room) => {
+    try {
+      const response = await fetch(`${backport}game/continue/${room}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (e) {
+      console.error('Error in nextRound function:', error);
+      throw e;
+    }
+  };
 
   function countDown() {
     setshow3(true);
@@ -109,9 +101,9 @@ function PlayingGame() {
     setTimeout(() => {
       setshow1(false);
     }, 3000);
-    setTimeout(() => setReady(false), 4000);
+    setTimeout(() => setReady(false), 5000);
     setTimeout(() => setIsCopied(false), 5000);
-    setdidCountDown(true);
+    setTimeout(() => setdidCountDown(true), 1000);
   }
 
   useEffect(() => {

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 function Backdrop({ onExit }) {
   const handleKeyDown = (event) => {
@@ -20,8 +19,5 @@ function Backdrop({ onExit }) {
   );
 }
 
-Backdrop.propTypes = {
-  onExit: PropTypes.func.isRequired,
-};
 
 export default Backdrop;

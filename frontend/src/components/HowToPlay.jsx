@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classes from './HowToPlay.module.css';
 
 function HowToPlay({ onExit }) {
@@ -31,8 +30,5 @@ function HowToPlay({ onExit }) {
   );
 }
 
-HowToPlay.propTypes = {
-  onExit: PropTypes.func.isRequired,
-};
 
 export default HowToPlay;

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import classes from './CopyLink.module.css';
 
@@ -27,14 +26,6 @@ function CopyLink({ roomData, handleCopyClick, isCopied }) {
   );
 }
 
-CopyLink.propTypes = {
-  roomData: PropTypes.shape({
-    won: PropTypes.bool.isRequired,
-    lost: PropTypes.bool.isRequired,
-    gameStarted: PropTypes.bool.isRequired,
-  }).isRequired,
-  handleCopyClick: PropTypes.func.isRequired,
-  isCopied: PropTypes.bool.isRequired,
-};
+
 
 export default CopyLink;
